@@ -50,6 +50,7 @@ Other tags than `daily` are built weekly. For security reasons, you should occas
 - **DB_USER** : username for database *(default : none)*
 - **DB_PASSWORD** : password for database user *(default : none)*
 - **DB_HOST** : database host *(default : none)*
+- **PERMISSION_RESET** : Set to 0 to disable permission fixing on container boot - can be useful if you have a large install and wish to handle permissions manually *(default : 1)*
 
 Don't forget to use a **strong password** for the admin account!
 
