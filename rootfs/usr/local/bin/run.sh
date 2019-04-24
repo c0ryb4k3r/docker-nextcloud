@@ -18,7 +18,6 @@ if [ ! -d /data/session ]; then
   mkdir -p /data/session;
 fi
 
-
 if [ "$PERMISSION_RESET" = "1" ] || [ ! -f /notfirstrun ] ; then
   echo "Updating permissions..."
   for dir in /nextcloud /data /config /apps2 /var/log /php /nginx /tmp /etc/s6.d; do
@@ -34,6 +33,7 @@ if [ "$PERMISSION_RESET" = "1" ] || [ ! -f /notfirstrun ] ; then
 else
   echo "Not updating permissions since \$PERMISSION_RESET was not '1' and this was not our first run";
 fi
+
 if [ ! -f /config/config.php ]; then
     # New installation, run the setup
     /usr/local/bin/setup.sh
@@ -49,7 +49,11 @@ else
 
     # Update DB schema as needed
     occ db:convert-mysql-charset
+fi
 
+# Run auto update
+if [ "$APP_AUTO_UPDATE" = "1" ] ; then
+  occ app:update --all
 fi
 
 exec su-exec $UID:$GID /bin/s6-svscan /etc/s6.d
