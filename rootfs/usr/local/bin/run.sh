@@ -46,6 +46,10 @@ else
 
     # Convert filecache fields
     occ db:convert-filecache-bigint
+
+    # Update DB schema as needed
+    occ db:convert-mysql-charset
+
 fi
 
 exec su-exec $UID:$GID /bin/s6-svscan /etc/s6.d
