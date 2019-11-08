@@ -18,7 +18,7 @@ if [ ! -d /data/session ]; then
   mkdir -p /data/session;
 fi
 
-if [ "$PERMISSION_RESET" = "1" ] || [ ! -f /notfirstrun ] ; then
+if [ "$PERMISSION_RESET" = "1" ] || [ ! -f /config/config.php ] ; then
   echo "Updating permissions..."
   for dir in /nextcloud /data /config /apps2 /var/log /php /nginx /tmp /etc/s6.d; do
     if $(find $dir ! -user $UID -o ! -group $GID|egrep '.' -q); then
@@ -28,7 +28,6 @@ if [ "$PERMISSION_RESET" = "1" ] || [ ! -f /notfirstrun ] ; then
       echo "Permissions in $dir are correct."
     fi
   done
-  touch /notfirstrun
   echo "Done updating permissions."
 else
   echo "Not updating permissions since \$PERMISSION_RESET was not '1' and this was not our first run";
