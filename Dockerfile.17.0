@@ -25,27 +25,20 @@ RUN apk -U upgrade \
     libtool \
     samba-dev \
     imagemagick-dev \
-    g++ \
-    make \
-    pcre-dev \
  && apk add \
     libressl \
     ca-certificates \
     libsmbclient \
     tzdata \
-    php7-imagick \
+    imagemagick \
  && pecl install \
     smbclient \
     apcu \
     redis \
-    imagick\
- && apk del \
-    g++ \
-    make \
-    pcre-dev \
- && echo "extension=imagick.so" > /php/conf.d/imagick.ini \
+    imagick \
  && echo "extension=smbclient.so" > /php/conf.d/smbclient.ini \
  && echo "extension=redis.so" > /php/conf.d/redis.ini \
+ && echo "extension=imagick.so" > /php/conf.d/imagick.ini \
  && mkdir /nextcloud \
  && cd /tmp \
  && NEXTCLOUD_TARBALL="nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" \
