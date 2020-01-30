@@ -1,4 +1,4 @@
-FROM c0ryb4k3r/nginx-php:7.2.24
+FROM c0ryb4k3r/nginx-php:7.3
 
 ENV UID=991 GID=991 \
     UPLOAD_MAX_SIZE=10G \
