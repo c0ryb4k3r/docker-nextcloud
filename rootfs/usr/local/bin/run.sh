@@ -18,20 +18,24 @@ if [ ! -d /data/session ]; then
   mkdir -p /data/session;
 fi
 
-if [ "$PERMISSION_RESET" = "1" ] || [ ! -f /config/config.php ] ; then
-  echo "Updating permissions..."
-  for dir in /nextcloud /data /config /apps2 /var/log /php /nginx /tmp /etc/s6.d; do
-    if $(find $dir ! -user $UID -o ! -group $GID|egrep '.' -q); then
-      echo "Updating permissions in $dir..."
-      chown -R $UID:$GID $dir
-    else
-      echo "Permissions in $dir are correct."
-    fi
-  done
-  echo "Done updating permissions."
+echo "Updating permissions..."
+for dir in /nextcloud /config /apps2 /var/log /php /nginx /tmp /etc/s6.d; do
+if $(find $dir ! -user $UID -o ! -group $GID|egrep '.' -q); then
+  echo "Updating permissions in $dir..."
+  chown -R $UID:$GID $dir
 else
-  echo "Not updating permissions since \$PERMISSION_RESET was not '1' and this was not our first run";
+  echo "Permissions in $dir are correct."
 fi
+done
+
+#Only update /data permissions when requested. Or on first run.
+if [ "$PERMISSION_RESET" = "1" ] || [ ! -f /config/config.php ] ; then
+  chown -R $UID:$GID /data
+else
+  echo "Not updating /data since \$PERMISSION_RESET was not '1' and this was not our first run";
+fi
+echo "Done updating permissions."
+
 
 if [ ! -f /config/config.php ]; then
     # New installation, run the setup
