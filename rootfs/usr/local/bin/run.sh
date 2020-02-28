@@ -30,6 +30,7 @@ done
 
 #Only update /data permissions when requested. Or on first run.
 if [ "$PERMISSION_RESET" = "1" ] || [ ! -f /config/config.php ] ; then
+  echo "Updating permissions in /data..."
   chown -R $UID:$GID /data
 else
   echo "Not updating /data since \$PERMISSION_RESET was not '1' and this was not our first run";
