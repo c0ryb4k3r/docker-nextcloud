@@ -1,6 +1,6 @@
 FROM c0ryb4k3r/nginx-php:7.4
 
-ARG NEXTCLOUD_VERSION=18.0.8
+ARG NEXTCLOUD_VERSION
 ARG GPG_nextcloud="2880 6A87 8AE4 23A2 8372  792E D758 99B9 A724 937A"
 
 ENV UID=991 GID=991 \
@@ -14,7 +14,18 @@ ENV UID=991 GID=991 \
     DB_TYPE=sqlite3 \
     DOMAIN=localhost
 
-RUN apk -U upgrade \
+RUN echo '********************* Beginning RUN *********************' \
+ && echo '********************* START NextCloud SECTION *********************' \
+ && if [ "x$NEXTCLOUD_VERSION" = "x" ] ; then \
+	echo 'Detecting latest NextCloud Release'; \
+	wget https://nextcloud.com/changelog/ -O /tmp/nextcloud_releases; \
+	NEXTCLOUD_VERSION=$(cat /tmp/nextcloud_releases | grep "name=\"latest18\"" -A 1 | grep -io 'id=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^id=["'"'"']//i' -e 's/"//' | awk -F '-' '{print $1 "." $2 "." $3}'); \
+	echo Using NextCloud version [${NEXTCLOUD_VERSION}]; \
+	rm -rf /tmp/nextcloud_releases; \
+ fi \
+ && echo '********************* End NextCloud SECTION *********************' \
+ && apk -U upgrade \
+ && apk -U upgrade \
  && apk add -t build-dependencies \
     gnupg \
     tar \
