@@ -48,6 +48,10 @@ else
     echo "Running OCC Upgrade"
     occ upgrade
 
+	# Add missing columns
+	echo "Adding any missing DB columns"
+	occ db:add-missing-columns
+
     # Add missing indexes
     echo "Adding any missing DB indexes"
     occ db:add-missing-indices
