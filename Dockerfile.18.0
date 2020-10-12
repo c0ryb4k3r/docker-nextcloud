@@ -20,9 +20,9 @@ RUN echo '********************* Beginning RUN *********************' \
 	echo 'Detecting latest NextCloud Release'; \
 	wget https://nextcloud.com/changelog/ -O /tmp/nextcloud_releases; \
 	NEXTCLOUD_VERSION=$(cat /tmp/nextcloud_releases | grep "name=\"latest18\"" -A 2 | grep -io 'id=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^id=["'"'"']//i' -e 's/"//' | awk -F '-' '{print $1 "." $2 "." $3}'); \
-	echo Using NextCloud version [${NEXTCLOUD_VERSION}]; \
 	rm -rf /tmp/nextcloud_releases; \
  fi \
+ && echo "Using NextCloud version [${NEXTCLOUD_VERSION}]" >> /nextcloud_version \
  && echo '********************* End NextCloud SECTION *********************' \
  && apk -U upgrade \
  && apk add -t build-dependencies \
@@ -79,8 +79,7 @@ VOLUME /data /config /apps2 /nextcloud/themes
 
 EXPOSE 8888
 
-LABEL description="A server software for creating file hosting services" \
-      nextcloud="Nextcloud v${NEXTCLOUD_VERSION}" \
+LABEL description="A server software for creating file hosting services"
       maintainer="Wonderfall <wonderfall@targaryen.house>"
 
 CMD ["run.sh"]
