@@ -33,30 +33,37 @@ if [ "$PERMISSION_RESET" = "1" ] || [ ! -f /config/config.php ] ; then
   echo "Updating permissions in /data..."
   chown -R $UID:$GID /data
 else
-  echo "Not updating /data since \$PERMISSION_RESET was not '1' and this was not our first run";
+  echo "Not updating /data since \$PERMISSION_RESET was not '1' and this was not our first run"
 fi
 echo "Done updating permissions."
 
 
 if [ ! -f /config/config.php ]; then
     # New installation, run the setup
+    echo "No config file detected; running setup"
     /usr/local/bin/setup.sh
 else
+
     # Run upgrade if applicable
+    echo "Running OCC Upgrade"
     occ upgrade
 
     # Add missing indexes
+    echo "Adding any missing DB indexes"
     occ db:add-missing-indices
 
     # Convert filecache fields
+    echo "Converting filecache fields"
     occ db:convert-filecache-bigint
 
     # Update DB schema as needed
+    echo "Update the DB Schema if needed"
     occ db:convert-mysql-charset
 fi
 
 # Run auto update
 if [ "$APP_AUTO_UPDATE" = "1" ] ; then
+  echo "Updating nextcloud applications."
   occ app:update --all
 fi
 
