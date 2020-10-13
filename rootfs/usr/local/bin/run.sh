@@ -11,6 +11,15 @@ sed -i -e "s/<APC_SHM_SIZE>/$APC_SHM_SIZE/g" /php/conf.d/apcu.ini \
 # Put the configuration and apps into volumes
 ln -sf /config/config.php /nextcloud/config/config.php &>/dev/null
 ln -sf /apps2 /nextcloud &>/dev/null
+
+echo "Check for existing UID - [${UID}]"
+getent passwd $UID > /dev/null 2&>1
+if [ $? -ne 0 ]; then
+   echo "Creating user nextcloud with UID=${UID} and GID=${GID}"
+   /usr/sbin/adduser --gid ${GID} --uid ${UID} --disabled-password --no-create-home nextcloud --gecos "" nextcloud
+else
+   echo "Existing user with UID=${UID} was found"
+fi
 chown -h $UID:$GID /nextcloud/config/config.php /nextcloud/apps2
 
 # Create folder for php sessions if not exists
@@ -46,7 +55,7 @@ else
 
     # Run upgrade if applicable
     echo "Running OCC Upgrade"
-    occ upgrade
+    occ upgrade -vvv
 
 	# Add missing columns
 	echo "Adding any missing DB columns"
