@@ -46,6 +46,17 @@ else
 fi
 echo "Done updating permissions."
 
+if [ -f /data/nextcloud.log ]; then
+	echo "Rotating Logs"
+	mv /data/nextcloud.log /data/nextcloud.log.$(timestamp=`date +%Y%m%d%H%M%S`)
+	touch /data/nextcloud.log
+
+	if [ "${LOGRETENTIONDAYS}z" -eq "z" ]; then
+		LOGRETENTIONDAYS=7
+	fi
+	echo "Removing logs older than ${LOGRENTIONDAYS} days"
+	find /data -mindepth 1 -name "nexcloud.log.*" -type f -mtime +${LOGRENTIONDAYS} -delete
+fi
 
 if [ ! -f /config/config.php ]; then
     # New installation, run the setup
@@ -80,4 +91,5 @@ if [ "$APP_AUTO_UPDATE" = "1" ] ; then
   occ app:update --all
 fi
 
+echo "Startup complete; launching server"
 exec su-exec $UID:$GID /bin/s6-svscan /etc/s6.d
