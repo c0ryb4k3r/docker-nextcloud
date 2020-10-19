@@ -1,13 +1,10 @@
-## wonderfall/nextcloud
-
-
-[![](https://images.microbadger.com/badges/version/wonderfall/nextcloud.svg)](http://microbadger.com/images/wonderfall/nextcloud "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/wonderfall/nextcloud.svg)](http://microbadger.com/images/wonderfall/nextcloud "Get your own image badge on microbadger.com")
+## c0ryb4k3r/docker-nextcloud forked from wonderfall/nextcloud
 
 **Made for my own use. Irregular updates! This image is eventually intended as a base for your own Docker image. I cannot be responsible if you're using outdated Docker images.**
 
 ### Features
 - Based on Alpine Linux.
-- Bundled with nginx and PHP 7.4 (wonderfall/nginx-php image).
+- Bundled with nginx and PHP 7.4 (c0ryb4k3r/nginx-php image).
 - Automatic installation using environment variables.
 - Package integrity (SHA512) and authenticity (PGP) checked during building process.
 - Data and apps persistence.
@@ -20,11 +17,9 @@
 - Environment variables provided (see below).
 
 ### Tags
-- **latest** : latest stable version.
-- **19.0** : latest 18.0.x version (stable)
-- **18.0** : latest 17.0.x version (oldstable, please migrate!)
-
-Since this project should suit my needs, I'll only maintain the latest stable version available.
+- **20.0** : latest 20.0.x version
+- **19.0** : latest 19.0.x version
+- **18.0** : latest 18.0.x version
 
 ### Build-time variables
 - **NEXTCLOUD_VERSION** : version of nextcloud
@@ -50,6 +45,7 @@ Since this project should suit my needs, I'll only maintain the latest stable ve
 - **DB_HOST** : database host *(default : none)*
 - **PERMISSION_RESET** : Set to 0 to disable permission fixing on container boot - can be useful if you have a large install and wish to handle permissions manually *(default : 1)*
 - **APP_AUTO_UPDATE** : Set to 1 to enable app auto update on container restart *(default : 0)*
+- **LOGRETENTIONDAYS** : Set how many days old to cleanup logs. (default : 7)
 
 Don't forget to use a **strong password** for the admin account!
 
@@ -78,7 +74,7 @@ docker run -d --name db_nextcloud \
        -e MYSQL_DATABASE=nextcloud -e MYSQL_USER=nextcloud \
        -e MYSQL_PASSWORD=supersecretpassword \
        mariadb:10
-       
+
 docker run -d --name nextcloud \
        --link db_nextcloud:db_nextcloud \
        -v /docker/nextcloud/data:/data \
@@ -125,7 +121,7 @@ networks:
 
 services:
   nextcloud:
-    image: wonderfall/nextcloud
+    image: c0ryb4k3r/docker-nextcloud:19.0
     depends_on:
       - nextcloud-db           # If using MySQL
       - redis                  # If using Redis
@@ -164,7 +160,7 @@ services:
       - MYSQL_PASSWORD=supersecretpassword
     networks:
       - nextcloud_network
-    
+
   # If using Redis
   redis:
     image: redis:alpine
