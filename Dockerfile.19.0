@@ -80,6 +80,6 @@ VOLUME /data /config /apps2 /nextcloud/themes
 EXPOSE 8888
 
 LABEL description="A server software for creating file hosting services" \
-      maintainer="Wonderfall <wonderfall@targaryen.house>"
+      maintainer="Cory Baker <C0ry.B4k3r@gmail.com> forked from Wonderfall <wonderfall@targaryen.house>"
 
 CMD ["run.sh"]
