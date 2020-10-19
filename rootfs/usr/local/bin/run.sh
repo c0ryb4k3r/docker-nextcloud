@@ -16,7 +16,8 @@ echo "Check for existing UID - [${UID}]"
 getent passwd $UID > /dev/null 2&>1
 if [ $? -ne 0 ]; then
    echo "Creating user nextcloud with UID=${UID} and GID=${GID}"
-   /usr/sbin/adduser --gid ${GID} --uid ${UID} --disabled-password --no-create-home nextcloud --gecos "" nextcloud
+   /usr/sbin/addgroup -g ${GID} nextcloud
+   /usr/sbin/adduser -G nextcloud -u ${UID} -D -H -g "" nextcloud
 else
    echo "Existing user with UID=${UID} was found"
 fi
