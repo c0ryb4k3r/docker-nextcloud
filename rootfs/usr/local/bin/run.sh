@@ -49,14 +49,15 @@ echo "Done updating permissions."
 
 if [ -f /data/nextcloud.log ]; then
 	echo "Rotating Logs"
-	mv /data/nextcloud.log /data/nextcloud.log.$(timestamp=`date +%Y%m%d%H%M%S`)
+	timestamp=`date +%Y%m%d-%H%M%S`
+	mv /data/nextcloud.log "/data/nextcloud.log.$timestamp"
 	touch /data/nextcloud.log
 
-	if [ "${LOGRETENTIONDAYS}z" -eq "z" ]; then
+	if [ "${LOGRETENTIONDAYS:-null}" = null ]; then
 		LOGRETENTIONDAYS=7
 	fi
-	echo "Removing logs older than ${LOGRENTIONDAYS} days"
-	find /data -mindepth 1 -name "nexcloud.log.*" -type f -mtime +${LOGRENTIONDAYS} -delete
+	echo "Removing logs older than ${LOGRETENTIONDAYS} days"
+	find /data -mindepth 1 -name "nexcloud.log.*" -type f -mtime +${LOGRETENTIONDAYS} -delete
 fi
 
 if [ ! -f /config/config.php ]; then
