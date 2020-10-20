@@ -82,9 +82,11 @@ else
     echo "Converting filecache fields"
     occ db:convert-filecache-bigint
 
-    # Update DB schema as needed
-    echo "Update the DB Schema if needed"
-    occ db:convert-mysql-charset
+	if [ "${DB_TYPE}" = "mysql" ]; then
+		# Update DB schema as needed
+		echo "Update the MySQL DB Schema if needed"
+		occ db:convert-mysql-charset
+	fi
 fi
 
 # Run auto update
