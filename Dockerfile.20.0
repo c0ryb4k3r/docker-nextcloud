@@ -23,6 +23,7 @@ RUN echo '********************* Beginning RUN *********************' \
 	NEXTCLOUD_VERSION=$(cat /tmp/nextcloud_releases | grep "name=\"latest20\"" -A 2 | grep -io 'id=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^id=["'"'"']//i' -e 's/"//' | awk -F '-' '{print $1 "." $2 "." $3}'); \
 	rm -rf /tmp/nextcloud_releases; \
  fi \
+ && echo "Using NextCloud version [${NEXTCLOUD_VERSION}]" \
  && echo "Using NextCloud version [${NEXTCLOUD_VERSION}]" >> /nextcloud_version \
  && echo '********************* End NextCloud SECTION *********************' \
  && apk -U upgrade \

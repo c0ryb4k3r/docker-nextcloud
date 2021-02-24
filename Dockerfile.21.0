@@ -1,4 +1,5 @@
-FROM c0ryb4k3r/nginx-php:7.4
+ARG NEXTCLOUD_VERSION
+FROM c0ryb4k3r/nginx-php:8.0
 
 ARG NEXTCLOUD_VERSION
 ARG GPG_nextcloud="2880 6A87 8AE4 23A2 8372  792E D758 99B9 A724 937A"
@@ -19,9 +20,10 @@ RUN echo '********************* Beginning RUN *********************' \
  && if [ "x$NEXTCLOUD_VERSION" = "x" ] ; then \
 	echo 'Detecting latest NextCloud Release'; \
 	wget https://nextcloud.com/changelog/ -O /tmp/nextcloud_releases; \
-	NEXTCLOUD_VERSION=$(cat /tmp/nextcloud_releases | grep "name=\"latest18\"" -A 2 | grep -io 'id=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^id=["'"'"']//i' -e 's/"//' | awk -F '-' '{print $1 "." $2 "." $3}'); \
+	NEXTCLOUD_VERSION=$(cat /tmp/nextcloud_releases | grep "name=\"latest21\"" -A 2 | grep -io 'id=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^id=["'"'"']//i' -e 's/"//' | awk -F '-' '{print $1 "." $2 "." $3}'); \
 	rm -rf /tmp/nextcloud_releases; \
  fi \
+ && echo "Using NextCloud version [${NEXTCLOUD_VERSION}]" \
  && echo "Using NextCloud version [${NEXTCLOUD_VERSION}]" >> /nextcloud_version \
  && echo '********************* End NextCloud SECTION *********************' \
  && apk -U upgrade \

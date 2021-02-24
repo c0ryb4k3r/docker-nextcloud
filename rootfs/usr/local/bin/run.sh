@@ -45,6 +45,7 @@ if [ "$PERMISSION_RESET" = "1" ] || [ ! -f /config/config.php ] ; then
 else
   echo "Not updating /data since \$PERMISSION_RESET was not '1' and this was not our first run"
 fi
+
 echo "Done updating permissions."
 
 if [ -f /data/nextcloud.log ]; then
