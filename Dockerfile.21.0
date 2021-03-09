@@ -36,6 +36,7 @@ RUN echo '********************* Beginning RUN *********************' \
     pcre-dev \
     libtool \
     samba-dev \
+    git \
     imagemagick-dev \
  && apk add \
     libressl \
@@ -48,10 +49,18 @@ RUN echo '********************* Beginning RUN *********************' \
     smbclient \
     apcu \
     redis \
-    imagick \
+ && echo '********************* Build Imagick manually **************' \
+ && git clone https://github.com/Imagick/imagick \
+ && cd /imagick \
+ && phpize && ./configure \
+ && make \
+ && make install \
+ && cd / \
+ && rm -rf /imagick \
+ && docker-php-ext-enable imagick \
  && echo "extension=smbclient.so" > /php/conf.d/smbclient.ini \
  && echo "extension=redis.so" > /php/conf.d/redis.ini \
- && echo "extension=imagick.so" > /php/conf.d/imagick.ini \
+### REM && echo "extension=imagick.so" > /php/conf.d/imagick.ini \
  && mkdir /nextcloud \
  && cd /tmp \
  && NEXTCLOUD_TARBALL="nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" \
