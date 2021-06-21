@@ -38,7 +38,6 @@ RUN echo '********************* Beginning RUN *********************' \
     samba-dev \
     imagemagick-dev \
  && apk add \
-    libressl \
     ca-certificates \
     libsmbclient \
     tzdata \

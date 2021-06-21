@@ -39,7 +39,6 @@ RUN echo '********************* Beginning RUN *********************' \
     git \
     imagemagick-dev \
  && apk add \
-    libressl \
     ca-certificates \
     libsmbclient \
     tzdata \
